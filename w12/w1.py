@@ -195,5 +195,59 @@ def testing_control_flow():
     assert name_of_courses("csc522") == ["alda"]
 
 
+@O.k
+def testing_truthiness():
+    def name_of_courses(code):
+        course_names = []
+        courses_tups = [("csc591", "fss"), ("csc512", "compiler"), ("csc522", "alda"), ("csc591", "fds")]
+
+        for c, n in courses_tups:
+            if code == c:
+                course_names.append(n)
+        return course_names
+
+    assert not name_of_courses("csc519")
+    assert not ""
+    assert "csc591"
+    assert not []
+    assert not [1, 2, 3]
+
+
+@O.k
+def testing_truthiness_any_all():
+    assert not all([1, []])
+    assert any([1, [], False])
+    assert all([1, [2, 3], {4}, "5"])
+
+
+@O.k
+def testing_sorting():
+    data = [0, -1, 2, 3, 4, 5, -6]
+
+    data_sorted = sorted(data)
+    data_sorted_abs = sorted(data, key=abs)
+    data_sorted_abs_rev = sorted(data, key=abs, reverse=True)
+
+    assert data_sorted[0] == -6
+    assert data_sorted_abs[0] == 0
+    assert data_sorted_abs_rev[0] == -6
+    assert data_sorted_abs_rev[1] == 5
+
+
+@O.k
+def testing_list_comprehensions():
+    data = [1, 2, 3, 4, 5, 6]
+    even_odd = [0 if x % 2 == 0 else 1 for x in data]
+
+    assert even_odd[::2] == [1, 1, 1]
+    assert even_odd[1::2] == [0, 0, 0]
+
+
+# @O.k
+# def testing_generators_and_iterators:
+#
+#     lazy_odd_number_generator
+
+
 if __name__ == "__main__":
     O.report()
