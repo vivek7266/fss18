@@ -210,7 +210,7 @@ def testing_truthiness():
     assert not ""
     assert "csc591"
     assert not []
-    assert not [1, 2, 3]
+    assert [1, 2, 3]
 
 
 @O.k
@@ -243,10 +243,142 @@ def testing_list_comprehensions():
     assert even_odd[1::2] == [0, 0, 0]
 
 
-# @O.k
-# def testing_generators_and_iterators:
-#
-#     lazy_odd_number_generator
+@O.k
+def testing_generators_and_iterators():
+    import sys
+
+    def lazy_range(n):
+        i = 0
+        while i < n:
+            yield i
+        i += 1
+
+    lazy_odd_number_generator = (i for i in range(100) if i % 2 != 0)
+    lazy_odd_number_list = [i for i in range(100) if i % 2 != 0]
+
+    assert not type(lazy_odd_number_generator) == type(lazy_odd_number_list)
+    assert not sys.getsizeof(lazy_odd_number_generator) == sys.getsizeof(lazy_odd_number_list)
+
+
+@O.k
+def testing_randomness():
+    import random
+
+    random_data = []
+    for i in range(2):
+        random_data.append(random.randrange(10, 100))
+
+    random_data_seeded = []
+    for i in range(2):
+        random.seed(5)
+        random_data_seeded.append(random.randrange(10, 100))
+
+    assert max(random_data) < 100
+    assert min(random_data) > 10
+    assert random_data_seeded[0] == random_data_seeded[1]
+
+
+@O.k
+def testing_regular_expressions():
+    data = re.split("[v]", "vivek")
+
+    assert re.search("v", "vivek")
+    assert len(data) == 3
+    assert data[2] == "ek"
+
+
+@O.k
+def testing_object_oriented_programming():
+    class CourseName:
+
+        def __init__(self, code="csc000", name="Unknown", full_name="Unknown"):
+            self.code = code
+            self.name = name
+            self.full_name = full_name
+
+        def __repr__(self):
+            return ':'.join([self.code, self.name, self.full_name])
+
+        def get_name(self):
+            return self.name
+
+        def get_code(self):
+            return self.code
+
+        def set_full_name(self, full_name):
+            self.full_name = full_name
+
+        def get_code_and_name(self):
+            return self.code + " : " + self.name
+
+    fss = CourseName("csc591", "fss")
+    assert fss.full_name == "Unknown"
+
+    fss_full_name = "foundations of software science"
+    fss.set_full_name(fss_full_name)
+    assert fss.full_name == fss_full_name
+
+
+@O.k
+def testing_functional_tools():
+    from functools import partial
+
+    def sum(x, y):
+        return x + y
+
+    def incr_by_4(x):
+        return sum(4, x)
+
+    incr_by_4_partial = partial(sum, 4)
+
+    assert incr_by_4(5) == 9
+    assert incr_by_4_partial(5) == 9
+
+
+@O.k
+def testing_map_reduce_filter():
+    from functools import reduce
+
+    data = [0, 1, 2, 3, 4]
+    evened_data = map(lambda x: x - 1 if x % 2 != 0 else x, data)
+    odded_data = map(lambda x: x - 1 if x % 2 == 0 else x, data)
+
+    evened_data_gt_2 = filter(lambda x: x > 0, evened_data)
+    odded_data_gt_3 = filter(lambda x: x > 0, odded_data)
+
+    reduced_data_even = reduce(lambda x, y: x + y, evened_data_gt_2)
+    reduced_data_odd = reduce(lambda x, y: x + y, odded_data_gt_3)
+
+    assert reduced_data_even == reduced_data_odd
+
+
+@O.k
+def testing_enumerate():
+    name = "foundations of software science"
+    vocabulary = set(name)
+    char_index = dict((c, i) for i, c in enumerate(vocabulary))
+    assert len(char_index) == len(vocabulary)
+    assert 'f' in char_index.keys() and 'f' in vocabulary
+
+
+@O.k
+def testing_zip_and_argument_unpacking():
+    codes = ["csc591", "csc522", "csc512"]
+    names = ["fss", "alda", "compiler"]
+
+    code_name_pairs = list(zip(codes, names))
+    code_name_unpacked = list(zip(*code_name_pairs))
+    print(code_name_pairs)
+    print(code_name_unpacked)
+
+    assert code_name_pairs == [("csc591", "fss"), ("csc522", "alda"), ("csc512", "compiler")]
+    assert code_name_unpacked == [('csc591', 'csc522', 'csc512'), ('fss', 'alda', 'compiler')]
+    assert list(code_name_unpacked[0]) == codes
+    assert list(code_name_unpacked[1]) == names
+
+
+@O.k
+def testing_args_kwargs():
 
 
 if __name__ == "__main__":
