@@ -1,0 +1,131 @@
+
+-----| testingFailure |-----------------------
+# this one must fail.. just to
+# test if the  unit test system is working
+Traceback (most recent call last):
+  File "w12/w1.py", line 19, in k
+    f()
+  File "w12/w1.py", line 32, in testingFailure
+    assert 1 == 2
+AssertionError
+
+
+-----| testingSuccess |-----------------------
+# if this one fails, we have a problem!
+# pass
+
+-----| testing_whitespace_formatting |-----------------------
+# testing whitespace formatting
+# pass
+
+-----| testing_modules |-----------------------
+# 
+# test import
+# 
+# pass
+
+-----| testing_arithmetic |-----------------------
+# testing arithmetic function
+# pass
+
+-----| testing_functions |-----------------------
+# testing creating functions
+# pass
+
+-----| testing_strings |-----------------------
+# testing string declarations
+# pass
+
+-----| testing_exceptions |-----------------------
+# testing exceptions
+# pass
+
+-----| testing_lists |-----------------------
+# testing lists functions
+# pass
+
+-----| testing_lists_2 |-----------------------
+# testing lists assignment to variables
+# pass
+
+-----| testing_tuples |-----------------------
+# testing tuples and string split
+# pass
+
+-----| testing_dicts |-----------------------
+# testing dictionary
+# pass
+
+-----| testing_default_dicts |-----------------------
+# testing default dictionary
+# pass
+
+-----| testing_counter |-----------------------
+# testing counter from collections package
+# pass
+
+-----| testing_sets |-----------------------
+# testing default truth and false in python
+# pass
+
+-----| testing_control_flow |-----------------------
+# testing control flow
+# pass
+
+-----| testing_truthiness |-----------------------
+# testing default truthiness and all function
+# pass
+
+-----| testing_truthiness_any_all |-----------------------
+# testing any function
+# pass
+
+-----| testing_sorting |-----------------------
+# testing default sorting function
+# pass
+
+-----| testing_list_comprehensions |-----------------------
+# testing list comprehensions
+# pass
+
+-----| testing_generators_and_iterators |-----------------------
+# testing lazy evaluation using yield, or say generators
+# pass
+
+-----| testing_randomness |-----------------------
+# testing randomness, taking special care to keep seed in mind
+# pass
+
+-----| testing_regular_expressions |-----------------------
+# testing regular expressions, splitting my name with a regex match
+# pass
+
+-----| testing_object_oriented_programming |-----------------------
+# testing object oriented programming in python
+# pass
+
+-----| testing_functional_tools |-----------------------
+# testing functional tool: partial ,here
+# pass
+
+-----| testing_map_reduce_filter |-----------------------
+# testing lambda operations along with map, reduce, filter
+# pass
+
+-----| testing_enumerate |-----------------------
+# testing enumerations, very handy to create a dictionary
+# pass
+
+-----| testing_zip_and_argument_unpacking |-----------------------
+# testing zip and argument unpacking
+# pass
+
+-----| testing_args_kwargs |-----------------------
+# testing args, list input
+# pass
+
+-----| testing_args_kwargs_2 |-----------------------
+# testing kwargs, dictionary input
+# pass
+
+# pass= 29 fail= 1 %pass = 97%

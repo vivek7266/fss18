@@ -40,6 +40,7 @@ def testingSuccess():
 
 @O.k
 def testing_whitespace_formatting():
+    """testing whitespace formatting"""
     add_var = 1 + \
               2 + \
               3
@@ -49,7 +50,7 @@ def testing_whitespace_formatting():
 @O.k
 def testing_modules():
     """
-    test import function
+    test import
     """
 
     def regex_matcher(input):
@@ -61,6 +62,8 @@ def testing_modules():
 
 @O.k
 def testing_arithmetic():
+    """testing arithmetic function"""
+
     def divide(x, y):
         return x / y
 
@@ -69,6 +72,8 @@ def testing_arithmetic():
 
 @O.k
 def testing_functions():
+    """testing creating functions"""
+
     def incr_by_4(x):
         return x + 4
 
@@ -80,6 +85,8 @@ def testing_functions():
 
 @O.k
 def testing_strings():
+    """testing string declarations"""
+
     test_string_1 = "this is a one line"
     test_string_2 = 'this is a one line'
 
@@ -88,6 +95,8 @@ def testing_strings():
 
 @O.k
 def testing_exceptions():
+    """testing exceptions"""
+
     def exception_function(x):
         try:
             var = 10 / x
@@ -101,6 +110,8 @@ def testing_exceptions():
 
 @O.k
 def testing_lists():
+    """testing lists functions"""
+
     def play_with_lists():
         l_1 = [1]
         l_1.append(2)
@@ -114,6 +125,8 @@ def testing_lists():
 
 @O.k
 def testing_lists_2():
+    """testing lists assignment to variables"""
+
     def play_with_lists():
         l_1 = [1, 2]
         try:
@@ -127,6 +140,8 @@ def testing_lists_2():
 
 @O.k
 def testing_tuples():
+    """testing tuples and string split"""
+
     def get_name_and_gender(inp_str):
         name_gender_split = inp_str.split(',')
         name = name_gender_split[0]
@@ -138,6 +153,8 @@ def testing_tuples():
 
 @O.k
 def testing_dicts():
+    """testing dictionary"""
+
     courses = {"csc591": "fss", "csc512": "compiler", "csc522": "alda"}
     assert "csc591" in courses
     assert courses.get("csc591") == "fss"
@@ -147,6 +164,8 @@ def testing_dicts():
 
 @O.k
 def testing_default_dicts():
+    """testing default dictionary"""
+
     from collections import defaultdict
 
     courses = defaultdict(set)
@@ -161,6 +180,8 @@ def testing_default_dicts():
 
 @O.k
 def testing_counter():
+    """testing counter from collections package"""
+
     from collections import Counter
 
     courses_tups = [("csc591", "fss"), ("csc512", "compiler"), ("csc522", "alda"), ("csc591", "fds")]
@@ -171,6 +192,8 @@ def testing_counter():
 
 @O.k
 def testing_sets():
+    """testing default truth and false in python"""
+
     course_codes = set()
     course_codes.add("csc591")
     course_codes.add("csc512")
@@ -182,6 +205,8 @@ def testing_sets():
 
 @O.k
 def testing_control_flow():
+    """testing control flow"""
+
     def name_of_courses(code):
         course_names = []
         courses_tups = [("csc591", "fss"), ("csc512", "compiler"), ("csc522", "alda"), ("csc591", "fds")]
@@ -197,6 +222,8 @@ def testing_control_flow():
 
 @O.k
 def testing_truthiness():
+    """testing default truthiness and all function"""
+
     def name_of_courses(code):
         course_names = []
         courses_tups = [("csc591", "fss"), ("csc512", "compiler"), ("csc522", "alda"), ("csc591", "fds")]
@@ -215,6 +242,8 @@ def testing_truthiness():
 
 @O.k
 def testing_truthiness_any_all():
+    """testing any function"""
+
     assert not all([1, []])
     assert any([1, [], False])
     assert all([1, [2, 3], {4}, "5"])
@@ -222,6 +251,8 @@ def testing_truthiness_any_all():
 
 @O.k
 def testing_sorting():
+    """testing default sorting function"""
+
     data = [0, -1, 2, 3, 4, 5, -6]
 
     data_sorted = sorted(data)
@@ -236,6 +267,8 @@ def testing_sorting():
 
 @O.k
 def testing_list_comprehensions():
+    """testing list comprehensions"""
+
     data = [1, 2, 3, 4, 5, 6]
     even_odd = [0 if x % 2 == 0 else 1 for x in data]
 
@@ -245,6 +278,8 @@ def testing_list_comprehensions():
 
 @O.k
 def testing_generators_and_iterators():
+    """testing lazy evaluation using yield, or say generators"""
+
     import sys
 
     def lazy_range(n):
@@ -253,7 +288,7 @@ def testing_generators_and_iterators():
             yield i
         i += 1
 
-    lazy_odd_number_generator = (i for i in range(100) if i % 2 != 0)
+    lazy_odd_number_generator = (i for i in lazy_range(100) if i % 2 != 0)
     lazy_odd_number_list = [i for i in range(100) if i % 2 != 0]
 
     assert not type(lazy_odd_number_generator) == type(lazy_odd_number_list)
@@ -262,6 +297,8 @@ def testing_generators_and_iterators():
 
 @O.k
 def testing_randomness():
+    """testing randomness, taking special care to keep seed in mind"""
+
     import random
 
     random_data = []
@@ -280,6 +317,7 @@ def testing_randomness():
 
 @O.k
 def testing_regular_expressions():
+    """testing regular expressions, splitting my name with a regex match"""
     data = re.split("[v]", "vivek")
 
     assert re.search("v", "vivek")
@@ -289,6 +327,8 @@ def testing_regular_expressions():
 
 @O.k
 def testing_object_oriented_programming():
+    """testing object oriented programming in python"""
+
     class CourseName:
 
         def __init__(self, code="csc000", name="Unknown", full_name="Unknown"):
@@ -321,6 +361,8 @@ def testing_object_oriented_programming():
 
 @O.k
 def testing_functional_tools():
+    """testing functional tool: partial ,here"""
+
     from functools import partial
 
     def sum(x, y):
@@ -337,6 +379,8 @@ def testing_functional_tools():
 
 @O.k
 def testing_map_reduce_filter():
+    """testing lambda operations along with map, reduce, filter"""
+
     from functools import reduce
 
     data = [0, 1, 2, 3, 4]
@@ -354,6 +398,8 @@ def testing_map_reduce_filter():
 
 @O.k
 def testing_enumerate():
+    """testing enumerations, very handy to create a dictionary"""
+
     name = "foundations of software science"
     vocabulary = set(name)
     char_index = dict((c, i) for i, c in enumerate(vocabulary))
@@ -363,6 +409,8 @@ def testing_enumerate():
 
 @O.k
 def testing_zip_and_argument_unpacking():
+    """testing zip and argument unpacking"""
+
     codes = ["csc591", "csc522", "csc512"]
     names = ["fss", "alda", "compiler"]
 
@@ -377,6 +425,7 @@ def testing_zip_and_argument_unpacking():
 
 @O.k
 def testing_args_kwargs():
+    """testing args, list input"""
     def sum_both(x, y):
         return x + y
 
@@ -402,6 +451,7 @@ def testing_args_kwargs():
 
 @O.k
 def testing_args_kwargs_2():
+    """testing kwargs, dictionary input"""
     def multiply_two_sum_third_fourth(m, n, x, y):
         return (m * n) + x + y
 
