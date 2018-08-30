@@ -274,7 +274,7 @@ def testing_randomness():
         random_data_seeded.append(random.randrange(10, 100))
 
     assert max(random_data) < 100
-    assert min(random_data) > 10
+    assert min(random_data) >= 10
     assert random_data_seeded[0] == random_data_seeded[1]
 
 
@@ -368,8 +368,6 @@ def testing_zip_and_argument_unpacking():
 
     code_name_pairs = list(zip(codes, names))
     code_name_unpacked = list(zip(*code_name_pairs))
-    print(code_name_pairs)
-    print(code_name_unpacked)
 
     assert code_name_pairs == [("csc591", "fss"), ("csc522", "alda"), ("csc512", "compiler")]
     assert code_name_unpacked == [('csc591', 'csc522', 'csc512'), ('fss', 'alda', 'compiler')]
@@ -379,6 +377,43 @@ def testing_zip_and_argument_unpacking():
 
 @O.k
 def testing_args_kwargs():
+    def sum_both(x, y):
+        return x + y
+
+    def sum_all(x, y, *argv):
+        sum_var = x + y
+
+        for arg in argv:
+            sum_var = sum_var + arg
+
+        return sum_var
+
+    def multiply(x, y):
+        return x * y
+
+    def sum_or_multiply_all(f, *args):
+        return f(*args)
+
+    assert sum_or_multiply_all(multiply, 1, 2) == 2
+    assert sum_or_multiply_all(sum_both, 1, 2) == 3
+    assert sum_or_multiply_all(sum_all, 1, 2) == 3
+    assert sum_or_multiply_all(sum_all, 1, 2, 3, 4, 5) == 15
+
+
+@O.k
+def testing_args_kwargs_2():
+    def multiply_two_sum_third_fourth(m, n, x, y):
+        return (m * n) + x + y
+
+    def sum_two_multiply_third(x, y, z):
+        return (x + y) * z
+
+    def sum_multiply_all(f, **kwargs):
+        return f(**kwargs)
+
+    assert sum_multiply_all(sum_two_multiply_third, x=1, y=2, z=3) == 9
+    assert sum_multiply_all(sum_two_multiply_third, y=1, z=2, x=3) == 8
+    assert sum_multiply_all(multiply_two_sum_third_fourth, x=1, y=2, m=3, n=4) == 15
 
 
 if __name__ == "__main__":
