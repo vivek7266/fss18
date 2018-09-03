@@ -68,17 +68,6 @@ DATA2 = """
     rainy,71,91,TRUE,no"""
 
 
-def extract_cols(dirty_col):
-    col_name = dirty_col
-    col_comment = ""
-    if '#' in dirty_col:
-        col_split = dirty_col.split('#')
-        if len(col_split) == 2:
-            col_name = col_split[0].strip()
-            col_comment = col_split[0].strip()
-    return col_name, col_comment
-
-
 def lines(s):
     """Return contents, one line at a time."""
     # yourCodeHere()
