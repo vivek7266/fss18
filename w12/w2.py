@@ -1,4 +1,4 @@
-from w12.testutils import O
+from testutils import O
 
 DATA1 = """
 outlook,$temp,?humidity,windy,play
