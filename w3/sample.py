@@ -1,9 +1,10 @@
 import random
 import math
-from testutils import O
+import w3.config as conf
+
 
 class Sample:
-    def __init__(self, max=512, txt=False):
+    def __init__(self, max=conf.SAMPLE.max, txt=False):
         self.max = max
         self.rank = 1
         self.txt = txt

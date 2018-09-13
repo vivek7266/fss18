@@ -1,9 +1,10 @@
 import math
+from testutils import O
 
 
 class Sym:
     def __init__(self):
-        self.counts = []
+        self.counts = {}
         self.mode = None
         self.most = 0
         self.n = 0
@@ -14,7 +15,7 @@ class Sym:
             return x
         self._ent = None
         self.n = self.n + 1
-        old = self.counts[x]
+        old = self.counts.get(x, 0)
         new = old and old + 1 or 1
         self.counts[x] = new
         if new > self.most:
@@ -25,13 +26,29 @@ class Sym:
         self._ent = None
         if self.n > 0:
             self.n = self.n - 1
-            self.counts[x] = self.counts[x] - 1
+            self.counts[x] = self.counts.get(x, 0) - 1
         return x
 
     def symEnt(self):
         if not self._ent:
             self._ent = 0
-            for x, n in enumerate(self.counts):
+            for x, n in self.counts.items():
                 p = n / self.n
                 self._ent = self._ent - p * math.log(p, 2)
         return self._ent
+
+    def syms(self, t, func=lambda x: x):
+        s = Sym()
+        [s.symInc(func(x)) for x in t]
+        return s
+
+
+@O.k
+def testingSym():
+    s = Sym().syms(['y', 'y', 'n'])
+    print(s.symEnt())
+    assert abs(s.symEnt() - 1) <= 0.5
+
+
+if __name__ == "__main__":
+    O.report()
