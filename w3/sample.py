@@ -1,10 +1,10 @@
 import random
 import math
 import w3.config as conf
-
+from helper.testutils import O
 
 class Sample:
-    def __init__(self, max=conf.SAMPLE.max, txt=False):
+    def __init__(self, max=conf.SAMPLE['max'], txt=False):
         self.max = max
         self.rank = 1
         self.txt = txt
@@ -20,7 +20,7 @@ class Sample:
             self.some.append(x)
         elif random.random() < now / self.n:
             self.sorted = False
-            self.some[math.floor(0.5 + random.random() * now)] = x
+            self.some[math.floor(int(random.random() * now))] = x
         return x
 
     def sampleSorted(self):
@@ -42,3 +42,23 @@ class Sample:
 
     # def sampleLt(self, s1, s2):
     #     return self.nth(s1, 0.5) < self.nth(s2, 0.5)
+
+
+@O.k
+def sampleTest():
+    random.seed(1)
+    s = []
+    for idx in range(5, 10):
+        s.append(Sample(max=2 ** idx))
+
+    for idx in range(1, 10001):
+        y = random.random()
+        for t in s:
+            t.sampleInc(y)
+
+    for t in s:
+        print(t.max, t.nth(0.5))
+
+
+if __name__ == "__main__":
+    O.report()

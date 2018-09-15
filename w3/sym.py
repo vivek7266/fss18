@@ -1,5 +1,5 @@
 import math
-from testutils import O
+from helper.testutils import O
 
 
 class Sym:
@@ -46,8 +46,12 @@ class Sym:
 @O.k
 def testingSym():
     s = Sym().syms(['y', 'y', 'n'])
-    print(s.symEnt())
+    # print(s.symEnt())
     assert abs(s.symEnt() - 1) <= 0.5
+
+    s = s.syms(['y', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'n', 'n', 'n', 'n', 'n'])
+    print(s.counts)
+    assert (round(s.symEnt(), 4) == 0.9403)
 
 
 if __name__ == "__main__":

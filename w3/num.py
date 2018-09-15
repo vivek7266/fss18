@@ -1,5 +1,5 @@
 from w3.sample import Sample
-from testutils import O
+from helper.testutils import O
 import w3.config as conf
 
 
@@ -9,8 +9,8 @@ class Num:
         self.mu = 0
         self.m2 = 0
         self.sd = 0
-        self.lo = conf.HI_LO_CONFIG.lo
-        self.hi = conf.HI_LO_CONFIG.hi
+        self.lo = conf.MAGIC_PARAMS['lo']
+        self.hi = conf.MAGIC_PARAMS['hi']
         self.some = Sample()
         self.w = 1
 
@@ -38,7 +38,7 @@ class Num:
         self.mu = self.mu - d / self.n
         self.m2 = self.m2 - d * (x - self.mu)
         if self.n >= 2:
-            self.sd = (self.m2 / (self.n - 1 + conf.HI_LO_CONFIG.tiny)) ** 0.5
+            self.sd = (self.m2 / (self.n - 1 + conf.MAGIC_PARAMS['tiny'])) ** 0.5
         return x
 
     def numNorm(self, x):
@@ -59,6 +59,9 @@ def testingNum():
     n = Num().nums([4, 10, 15, 38, 54, 57, 62, 83, 100, 100, 174, 190, 215, 225,
                     233, 250, 260, 270, 299, 300, 306, 333, 350, 375, 443, 475,
                     525, 583, 780, 1000])
+
+    print(n.mu)
+    print(round(n.sd, 3))
     assert n.mu == 270.3 and round(n.sd, 3) == 231.946
 
 

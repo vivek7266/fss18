@@ -1,4 +1,4 @@
-from testutils import O
+from helper.testutils import O
 
 DATA1 = """
 outlook,$temp,?humidity,windy,play
