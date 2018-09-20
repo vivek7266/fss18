@@ -65,5 +65,5 @@ def testingNum():
     assert n.mu == 270.3 and round(n.sd, 3) == 231.946
 
 
-if __name__ == "__main__":
-    O.report()
+# if __name__ == "__main__":
+#     O.report()

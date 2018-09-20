@@ -60,5 +60,5 @@ def sampleTest():
         print(t.max, t.nth(0.5))
 
 
-if __name__ == "__main__":
-    O.report()
+# if __name__ == "__main__":
+#     O.report()

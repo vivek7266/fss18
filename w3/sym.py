@@ -54,5 +54,5 @@ def testingSym():
     assert (round(s.symEnt(), 4) == 0.9403)
 
 
-if __name__ == "__main__":
-    O.report()
+# if __name__ == "__main__":
+#     O.report()
