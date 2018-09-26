@@ -6,13 +6,14 @@ from helper.testutils import O
 
 class Data:
     def __init__(self):
-        self.w = []
-        self.syms = []
-        self.nums = []
+        self.w = {}
+        self.syms = {}
+        self.nums = {}
         self.label_class = None
         self.rows = []
         self.name = []
         self._use = []
+        self.indeps = []
 
     def indep(self, c):
         return not (self.w[c] and self.label_class != c)
@@ -24,10 +25,10 @@ class Data:
         indeps = []
         for c0, x in enumerate(cells):
             if not re.match('\?', x):
-                c = len(self._use) + 1
-                self._use[c] = c0
-                self.name[c] = x
-                if re.match(r'[<>%$]', x):
+                c = len(self._use)
+                self._use.append(c0)
+                self.name.append(x)
+                if re.match(r'[<>\$]', x):
                     self.nums[c] = Num()
                 else:
                     self.syms[c] = Sym()
@@ -47,20 +48,20 @@ class Data:
         for c, c0 in enumerate(self._use):
             x = cells[c0]
             if x != "?":
-                if self.nums[c]:
+                if c in self.nums:
                     x = float(x)
-                    self.nums.numInc(self.nums[c], x)
+                    self.nums[c].numInc(x)
                 else:
-                    self.syms.symInc(self.nums[c], x)
-            self.rows[r][c] = x
-        return
+                    self.syms[c].symInc(x)
+            self.rows[r].append(x)
+        return self
 
     def rows1(self, file):
         with open(file) as fs:
             first = True
             for line in fs.readlines():
-                line = re.sub(r'([\r\n\t ]|#.*)', '', line)
-                line = re.sub(r'#.*', '', line)
+                line = re.sub(r'([ \n\r\t ]|#.*)', '', line)
+                # line = re.sub(r'#.*', '', line)
                 cells = line.split(',')
                 if len(cells) > 0:
                     if first:
@@ -71,13 +72,50 @@ class Data:
         return self
 
 
+def print_data_stats(data):
+    print("\n\n")
+    print("\t\t\tn\tmode\tfrequency")
+    for k, v in data.syms.items():
+        print("{}\t{}\t{}\t{}\t{}".format(k+1, data.name[k], v.n, v.mode, v.most))
+    print("\n\t\tn\tmu\tsd")
+    for k, v in data.nums.items():
+        print('{0}\t{1}\t{2}\t{3:.2f}\t{4:.2f}'.format(k+1, data.name[k], v.n, v.mu, v.sd))
+
+
 @O.k
 def testingData():
     data = Data()
     data = data.rows1("weather.csv")
-    print(len(data.rows))
-    for k, v in data.syms:
-        print(data.name[k], v.n, v.mode, v.most)
+    print_data_stats(data)
+    for k, v in data.syms.items():
+        if data.name[k] == 'outlook':
+            assert v.mode == 'sunny'
+            assert v.most == 5
+    for k, v in data.nums.items():
+        if data.name[k] == '$temp':
+            assert round(v.mu) == round(73.57)
+
+    data = Data()
+    data = data.rows1("weatherLong.csv")
+    print_data_stats(data)
+    for k, v in data.syms.items():
+        if data.name[k] == 'outlook':
+            assert v.mode == 'sunny'
+            assert v.most == 10
+    for k, v in data.nums.items():
+        if data.name[k] == '<humid':
+            assert round(v.mu) == round(81.64)
+
+    data = Data()
+    data = data.rows1("auto.csv")
+    print_data_stats(data)
+    for k, v in data.syms.items():
+        if data.name[k] == 'origin':
+            assert v.mode == '1'
+            assert v.most == 249
+    for k, v in data.nums.items():
+        if data.name[k] == '>acceltn':
+            assert round(v.mu) == round(15.57)
 
 
 if __name__ == "__main__":

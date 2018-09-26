@@ -3,6 +3,7 @@ import math
 import w3.config as conf
 from helper.testutils import O
 
+
 class Sample:
     def __init__(self, max=conf.SAMPLE['max'], txt=False):
         self.max = max
@@ -44,7 +45,7 @@ class Sample:
     #     return self.nth(s1, 0.5) < self.nth(s2, 0.5)
 
 
-@O.k
+# @O.k
 def sampleTest():
     random.seed(1)
     s = []
@@ -57,8 +58,9 @@ def sampleTest():
             t.sampleInc(y)
 
     for t in s:
-        print(t.max, t.nth(0.5))
-
+        p50 = t.nth(0.5)
+        print(p50)
+        assert 0.2 < p50 < 0.7
 
 # if __name__ == "__main__":
 #     O.report()

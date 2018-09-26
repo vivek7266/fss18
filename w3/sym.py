@@ -43,7 +43,7 @@ class Sym:
         return s
 
 
-@O.k
+# @O.k
 def testingSym():
     s = Sym().syms(['y', 'y', 'n'])
     # print(s.symEnt())
