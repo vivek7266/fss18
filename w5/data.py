@@ -165,14 +165,13 @@ def testingData():
     sort together on (-1)weight, (1)acceltn, (1)mpg
     """
     sorted_weight = sorted(rows_with_doms, key=lambda x: (x[3], -x[4], -x[7]))
-    print(sorted_weight)
+    # print(sorted_weight)
     for idx in range(len(sorted_weight) - 1):
         """
-        sort the data basis the order of maximums and minimums. 
-        check if the average of bottom 50 dom scores is lower than top 50 
+        check if the average of bottom 10 dom scores is lower than top 10 
         """
-        avg_dom_top_50 = reduce(lambda x, y: float(x) + float(y), map(lambda x: x[8], sorted_weight[:50])) / 50
-        avg_dom_bottom_50 = reduce(lambda x, y: float(x) + float(y), map(lambda x: x[8], sorted_weight[-50:])) / 50
+        avg_dom_top_50 = reduce(lambda x, y: float(x) + float(y), map(lambda x: x[8], sorted_weight[:10])) / 10
+        avg_dom_bottom_50 = reduce(lambda x, y: float(x) + float(y), map(lambda x: x[8], sorted_weight[-10:])) / 10
         # print(avg_dom_top_50, " -- ", avg_dom_bottom_50)
         assert avg_dom_top_50 > avg_dom_bottom_50
 
