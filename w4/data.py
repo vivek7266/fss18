@@ -40,7 +40,7 @@ class Data:
                 elif re.match(r'!', x):
                     self.label_class = c
                 else:
-                    indeps.append(c)
+                    self.indeps.append(c)
         return
 
     def row(self, cells):
