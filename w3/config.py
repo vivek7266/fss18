@@ -8,3 +8,6 @@ SAMPLE = {
     'max': 512
 }
 
+DOM = {
+    'sample': 100
+}
