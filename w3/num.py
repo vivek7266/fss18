@@ -31,7 +31,7 @@ class Num:
         return x
 
     def numDec(self, x):
-        if x is None or self.n == 1:
+        if x is None or x == "?" or self.n == 1:
             return x
         self.n = self.n - 1
         d = x - self.mu

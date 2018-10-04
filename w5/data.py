@@ -104,6 +104,79 @@ class Data:
             res.append(self.rows[r1])
         return res
 
+    def unsuper(self):
+        rows = self.rows
+        enough = len(rows) ** conf.UNSUPER['enough']
+        most = 0
+
+        def band(c, lo, hi):
+            if lo == 0:
+                return "..{}".format(rows[hi][c])
+            elif hi == most:
+                return "{}..".format(str(rows[lo][c]))
+            else:
+                return "{}..{}".format(str(rows[lo][c]), str(rows[hi][c]))
+
+        def argmin(c, lo, hi):
+            cut = None
+            if hi - lo > 2 * enough:
+                l = Num()  # left split
+                r = Num()  # right split
+
+                # push everything in the right
+                for i in range(lo, hi):
+                    r.numInc(rows[i][c])
+
+                best = r.sd  # currently all data is in right so best is sd on right
+                # print(best)
+                # push to the left one by one and keep track of best
+                for i in range(lo, hi):
+                    x = rows[i][c]
+                    l.numInc(x)
+                    r.numDec(x)
+                    if l.n > enough and r.n > enough:
+                        tmp = Num.numXpect(l, r) * 1.05
+                        # print(tmp, x)
+                        if tmp < best:
+                            cut, best = i, tmp
+                            # print(tmp, best)
+            return cut
+
+        def cuts(c, lo, hi, pre):
+            txt = "{}{}..{}".format(pre, str(rows[lo][c]), str(rows[hi][c]))
+            cut = argmin(c, lo, hi)
+            # print(cut)
+            if cut:
+                print(txt)
+                cuts(c, lo, cut, "{}|.. ".format(pre))
+                cuts(c, cut + 1, hi, "{}|.. ".format(pre))
+            else:
+                b = band(c, lo, hi)
+                print(txt + " (" + b + ")")
+                for i in range(lo, hi + 1):
+                    rows[i][c] = b
+
+        def stop(c):
+            # look for ? and return accordingly
+            for i in range(len(rows) - 1, 0, -1):
+                if rows[i][c] != "?":
+                    return i
+            return 0
+
+        for c in self.indeps:
+            if c in self.nums:
+                # sort all the rows and push ? at the bottom
+                rows = sorted(rows, key=lambda x: str(x[c]))
+                # print(["{}:{}".format(i, row) for i, row in enumerate(rows)])
+                # find the max num of rows to worry about
+                most = stop(c)
+                print('\n--' + str(self.name[c] + ', most = ' + str(most) + '------------------'))
+                cuts(c, 0, most, '|.. ')
+        print(", ".join(self.name))
+        for i in rows:
+            print("\t".join(str(r) for r in i))
+        return rows
+
 
 def lines(src=None):
     if src is None:
@@ -173,6 +246,13 @@ def testingData():
     avg_dom_bottom = reduce(lambda x, y: float(x) + float(y), map(lambda x: x[-1], sorted_auto_data[-10:])) / 10
     # print(avg_dom_top, " -- ", avg_dom_bottom)
     assert avg_dom_top > avg_dom_bottom
+
+
+@O.k
+def testUnsuper():
+    data = rows("../w4/weatherLong.csv")
+    disc_rows = data.unsuper()
+    assert disc_rows[0][1] == '..68.0'
 
 
 if __name__ == "__main__":
