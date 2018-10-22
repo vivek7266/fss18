@@ -91,8 +91,9 @@ class Data:
         return self.rows[row2] if row1 != row2 else self.another(row1)
 
     def doms(self):
+        if len(self.w) == 0: return
         n = conf.DOM['sample']
-        # self.name.append('>dom') if '>dom' not in self.name else True
+        self.name.append('>dom') if '>dom' not in self.name else True
         res = []
         for r1 in range(len(self.rows)):
             row1 = self.rows[r1]
@@ -102,7 +103,7 @@ class Data:
                 if self.dom(row1, row2):
                     row1[-1] += 1 / n
             res.append(self.rows[r1])
-        return res
+        return self
 
     def unsuper(self):
         rows = self.rows
@@ -134,7 +135,7 @@ class Data:
                     x = rows[i][c]
                     l.numInc(x)
                     r.numDec(x)
-                    if l.n > enough and r.n > enough:
+                    if l.n >= enough and r.n >= enough:
                         tmp = Num.numXpect(l, r) * 1.05
                         # print(tmp, x)
                         if tmp < best:
@@ -166,7 +167,7 @@ class Data:
         for c in self.indeps:
             if c in self.nums:
                 # sort all the rows and push ? at the bottom
-                rows = sorted(rows, key=lambda x: str(x[c]))
+                rows = sorted(rows, key=lambda x: 10 ** 32 if x[c] == '?' else x[c])
                 # print(["{}:{}".format(i, row) for i, row in enumerate(rows)])
                 # find the max num of rows to worry about
                 most = stop(c)
@@ -252,7 +253,7 @@ def testingData():
 def testUnsuper():
     data = rows("../w4/weatherLong.csv")
     disc_rows = data.unsuper()
-    assert disc_rows[0][1] == '..68.0'
+    assert disc_rows[0][1] == '..69.0'
 
 
 if __name__ == "__main__":

@@ -4,24 +4,24 @@ import w3.config as conf
 
 
 class Num:
-    def __init__(self):
+    def __init__(self, max=1000):
         self.n = 0
         self.mu = 0
         self.m2 = 0
         self.sd = 0
         self.lo = conf.MAGIC_PARAMS['lo']
         self.hi = conf.MAGIC_PARAMS['hi']
-        self.some = Sample()
+        self.some = Sample(max)
         self.w = 1
 
     def numInc(self, x):
-        if x is None:
+        if x is None or x == "?":
             return x
         self.n = self.n + 1
         self.some.sampleInc(x)
         d = x - self.mu
-        self.mu = self.mu + d / self.n
-        self.m2 = self.m2 + d * (x - self.mu)
+        self.mu = self.mu + (d / self.n)
+        self.m2 = self.m2 + (d * (x - self.mu))
         if x > self.hi:
             self.hi = x
         if x < self.lo:
@@ -35,14 +35,20 @@ class Num:
             return x
         self.n = self.n - 1
         d = x - self.mu
-        self.mu = self.mu - d / self.n
-        self.m2 = self.m2 - d * (x - self.mu)
+        self.mu = self.mu - (d / self.n)
+        var = self.m2 - (d * (x - self.mu))
+        if var < 0:
+            var = 0
+        self.m2 = var
         if self.n >= 2:
-            self.sd = (self.m2 / (self.n - 1 + conf.MAGIC_PARAMS['tiny'])) ** 0.5
+            self.sd = (self.m2 / (self.n - 1 + 10 ** -32)) ** 0.5
         return x
 
+    # def numNorm(self, x):
+    #     return ((x is None or x == "?") and 0.5) or (x - self.lo) / (self.hi - self.lo + conf.MAGIC_PARAMS['tiny'])
+
     def numNorm(self, x):
-        return (x is None and 0.5) or (x - self.lo) / (self.hi - self.lo + 10 ** -32)
+        return (x - self.lo) / (self.hi - self.lo + (10 ** -32))
 
     def numXpect(i, j):
         n = i.n + j.n + 0.00001
@@ -50,7 +56,8 @@ class Num:
 
     def nums(self, t, func=lambda x: x):
         n = Num()
-        [n.numInc(func(x)) for x in t]
+        for x in t:
+            self.numInc(func(x))
         return n
 
 
@@ -63,7 +70,6 @@ def testingNum():
     print(n.mu)
     print(round(n.sd, 3))
     assert n.mu == 270.3 and round(n.sd, 3) == 231.946
-
 
 # if __name__ == "__main__":
 #     O.report()

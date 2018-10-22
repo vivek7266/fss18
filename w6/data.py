@@ -5,7 +5,7 @@ import sys
 from helper.testutils import O
 import w3.config as conf
 import random
-from functools import reduce
+import math
 
 
 class Data:
@@ -91,8 +91,9 @@ class Data:
         return self.rows[row2] if row1 != row2 else self.another(row1)
 
     def doms(self):
+        if len(self.w) == 0: return
         n = conf.DOM['sample']
-        # self.name.append('>dom') if '>dom' not in self.name else True
+        self.name.append('>dom') if '>dom' not in self.name else True
         res = []
         for r1 in range(len(self.rows)):
             row1 = self.rows[r1]
@@ -102,7 +103,7 @@ class Data:
                 if self.dom(row1, row2):
                     row1[-1] += 1 / n
             res.append(self.rows[r1])
-        return res
+        return self
 
     def unsuper(self):
         rows = self.rows
@@ -134,7 +135,7 @@ class Data:
                     x = rows[i][c]
                     l.numInc(x)
                     r.numDec(x)
-                    if l.n > enough and r.n > enough:
+                    if l.n >= enough and r.n >= enough:
                         tmp = Num.numXpect(l, r) * 1.05
                         # print(tmp, x)
                         if tmp < best:
@@ -166,7 +167,7 @@ class Data:
         for c in self.indeps:
             if c in self.nums:
                 # sort all the rows and push ? at the bottom
-                rows = sorted(rows, key=lambda x: str(x[c]))
+                rows = sorted(rows, key=lambda x: 10 ** 32 if x[c] == '?' else x[c])
                 # print(["{}:{}".format(i, row) for i, row in enumerate(rows)])
                 # find the max num of rows to worry about
                 most = stop(c)
@@ -180,6 +181,7 @@ class Data:
     def super(self):
         rows = self.rows
         enough = len(rows) ** conf.UNSUPER['enough']
+        goal = len(self.name) - 1
         most = 0
 
         def band(c, lo, hi):
@@ -192,32 +194,43 @@ class Data:
 
         def argmin(c, lo, hi):
             cut = None
+            xl, yl = Num(), Num()  # left split for both features and label cols
+            xr, yr = Num(), Num()  # right split for both features and label cols
+
+            # push everything in the right
+            for i in range(lo, hi):
+                xr.numInc(rows[i][c])
+                yr.numInc(rows[i][goal])
+
+            best_x = xr.sd  # currently all data is in right so best is sd on right
+            best_y = yr.sd  # currently all data is in right so best is sd on right
+            mu = yr.mu
+            # print(best)
+            # push to the left one by one and keep track of best
             if hi - lo > 2 * enough:
-                l = Num()  # left split
-                r = Num()  # right split
-
-                # push everything in the right
-                for i in range(lo, hi):
-                    r.numInc(rows[i][c])
-
-                best = r.sd  # currently all data is in right so best is sd on right
-                # print(best)
-                # push to the left one by one and keep track of best
                 for i in range(lo, hi):
                     x = rows[i][c]
-                    l.numInc(x)
-                    r.numDec(x)
-                    if l.n > enough and r.n > enough:
-                        tmp = Num.numXpect(l, r) * 1.05
+                    y = rows[i][goal]
+                    xl.numInc(x)
+                    yl.numInc(y)
+                    xr.numDec(x)
+                    yr.numDec(y)
+                    if xl.n >= enough and xr.n >= enough:
+                        tmp_x = xl.numXpect(xr) * 1.05
+                        tmp_y = yl.numXpect(yr) * 1.05
                         # print(tmp, x)
-                        if tmp < best:
-                            cut, best = i, tmp
-                            # print(tmp, best)
-            return cut
+                        try:
+                            if tmp_x < best_x:
+                                if tmp_y < best_y:
+                                    cut, best_x, best_y = i, tmp_x, tmp_y
+                                    # print(tmp_x, tmp_y, best_x, best_y)
+                        except:
+                            print(tmp_x, tmp_y)
+            return cut, mu
 
         def cuts(c, lo, hi, pre):
             txt = "{}{}..{}".format(pre, str(rows[lo][c]), str(rows[hi][c]))
-            cut = argmin(c, lo, hi)
+            cut, mu = argmin(c, lo, hi)
             # print(cut)
             if cut:
                 print(txt)
@@ -225,7 +238,7 @@ class Data:
                 cuts(c, cut + 1, hi, "{}|.. ".format(pre))
             else:
                 b = band(c, lo, hi)
-                print(txt + " (" + b + ")")
+                print("{} ==> {}".format(txt, math.floor(100 * mu)))
                 for i in range(lo, hi + 1):
                     rows[i][c] = b
 
@@ -239,7 +252,7 @@ class Data:
         for c in self.indeps:
             if c in self.nums:
                 # sort all the rows and push ? at the bottom
-                rows = sorted(rows, key=lambda x: str(x[c]))
+                rows = sorted(rows, key=lambda x: 10 ** 32 if x[c] == '?' else x[c])
                 # print(["{}:{}".format(i, row) for i, row in enumerate(rows)])
                 # find the max num of rows to worry about
                 most = stop(c)
@@ -281,9 +294,17 @@ def print_data_stats(data):
 
 @O.k
 def testSuper():
-    data = rows("../w4/weatherLong.csv")
+    data = rows("../w4/auto.csv")
+    data = data.doms()
     disc_rows = data.super()
-    assert disc_rows[0][1] == '..68.0'
+    # print(disc_rows)
+
+    data_1 = rows("../w4/weatherLong.csv")
+    data_1 = data_1.doms()
+    disc_rows_1 = data_1.super()
+    # print(disc_rows)
+    assert disc_rows_1[0][1] == '..69.0'
+
 
 
 if __name__ == "__main__":
